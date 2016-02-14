@@ -1,0 +1,438 @@
+#+TITLE: Baltimore Light Rail tracker
+#+AUTHOR: Aaron Miller <me@aaron-miller.me>
+#+LANGUAGE: en
+#+OPTIONS: \n:t
+
+* Introduction
+
+** What is this?
+It's a single-page web application which integrates a variety of APIs to produce a map showing:
+- The Baltimore light rail lines and stations
+- If you allow geolocation access, the closest station to your current location
+- Real-time positions of trains currently in service
+- ETA information for trains arriving at the station nearest you
+
+** OK, but what /is/ this?
+It's an Emacs Org-mode file that embodies the aforementioned single-page web application, written in the literate programming style. Exporting this file to HTML, using Org-mode's core export functionality, produces a build of the web application which you can host on your favorite server and use in your favorite browser.
+
+The best way to read this document is in Emacs with Org 8.x and the Org and Emacs Lisp reference manuals installed. That way, you get the full benefit of this powerful programming environment, in which, for example, the full source and documentation of any Emacs Lisp function is just a few keystrokes away. (If you're wondering: =C-h f RET= while point is on the function name, then =TAB RET= in the ~*Help*~ buffer.)
+
+Failing that, you'll probably get the most benefit out of this document if you come to it with a basic understanding of both Org mode and Emacs Lisp; the former, of course, since the document is written in it, and the latter so that you can understand what's going on in the Emacs Lisp utility functions used throughout this document.
+
+That said, if you're totally unfamiliar with everything I've just mentioned, there's probably still something for you here. If nothing else, maybe an example of literate programming might come in handy. In any case, enjoy! And if you have questions, don't hesitate to [[mailto:me@aaron-miller.me][ask]].
+
+* External libraries
+Our app depends on a few externally hosted Javascript libraries, so let's go ahead and include them in the HTML document.
+
+#+NAME: external-library-refs
+#+BEGIN_SRC html :eval never
+  <script type="text/javascript"
+          src="http://danml.com/js/download.js"></script>
+#+END_SRC
+
+#+CALL: insert-wrapped-source(tag="div",block-name="external-library-refs") :results html
+
+* Utility functions
+
+** expose-to-js
+We'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.
+
+#+NAME: expose-to-js
+#+BEGIN_SRC emacs-lisp :exports code :results silent :var block-name="" :var binding=""
+    (and (not (string= block-name ""))
+         (not (string= binding ""))
+         (save-excursion
+           (let ((json-encoding-pretty-print t)
+                 (block-lang "")
+                 block-loc block-type from to
+                 block-contents cg-handle html-result)
+             ;; Expand #+INCLUDE: keywords so that they become named
+             ;; blocks we can find. Since this expansion mutates the
+             ;; buffer contents, we do it within a change group so that it
+             ;; can be atomically reverted once we're done.
+             (setq cg-handle (prepare-change-group))
+             (activate-change-group cg-handle)
+             (org-export-expand-include-keyword)
+             (unwind-protect
+                  (setq block-loc (org-babel-find-named-block block-name))
+               (if (null block-loc)
+                   (signal 'no-such-block
+                           (list (concat "Block '" block-name
+                                         "' not found in this buffer.")))
+                   (progn
+                     ;; Go to start of block (beginning of #+NAME: line)
+                     (goto-char block-loc)
+                     ;; Find out what kind of block we're dealing with here,
+                     ;; so we can correctly find its end keyword
+                     (save-match-data
+                       (re-search-forward "^#\\+BEGIN_\\([A-Za-z]+\\)")
+                       (setq block-type
+                             (downcase (buffer-substring-no-properties
+                                        (match-beginning 1) (match-end 1)))))
+                     ;; Also capture the block language, if any, so that
+                     ;; we know what (if any) kind of unescaping we need
+                     ;; to do
+                     (save-match-data
+                       (and (re-search-forward " *\\([_[:alnum:]]+\\)" nil t)
+                            (setq block-lang
+                                  (buffer-substring-no-properties
+                                   (match-beginning 1) (match-end 1)))))
+                     ;; Move ahead to the beginning of the first line in the
+                     ;; actual source, and store that as the character
+                     ;; position where we'll start capturing
+                     (end-of-line)
+                     (forward-char 1)
+                     (setq from (point))
+                     ;; Move ahead to the end of the code block, and store
+                     ;; that as the character position where we'll stop
+                     ;; capturing
+                     (save-match-data
+                       (re-search-forward (concat "^#\\+END_" block-type "$")))
+                     (beginning-of-line)
+                     (setq to (point))
+                     ;; Unescape Org keywords within the source block, if
+                     ;; this is an Org source block
+                     (and (string= "org" block-lang)
+                          (progn
+                            (goto-char from)
+                            (save-match-data
+                              (while (and (not (> (point) to))
+                                          (re-search-forward "^\\( *\\),\\(#\\+\\|\\*\\)"
+                                                             to t))
+                                (replace-match "\\1\\2")
+                                (setq to (- to 1))))))
+                     ;; Capture the source block contents...
+                     (setq block-contents
+                           (buffer-substring-no-properties from to))
+                     ;; ...and put together a string with the <script> tag
+                     (setq html-result
+                           (concat "<script type=\"text/javascript\">" "\n"
+                                   "window." binding
+                                   " = "
+                                   (json-encode block-contents) ";"
+                                   "\n"
+                                   "</script>"))
+                     (cancel-change-group cg-handle)))
+               ;; Make sure we don't leave the buffer mutated if we signal
+               ;; (this is the `unwind-protect''s unwind form)
+               (cancel-change-group cg-handle))
+             ;; Finally, return the HTML string
+             html-result)))
+#+END_SRC
+
+** insert-wrapped-source
+Org-mode doesn't currently support syntax highlighting in example blocks, and also doesn't support named references to the literal content of a source block (rather than the results of evaluating that source block).
+
+This is a pain in the neck for us, because we want to do both of these things. Defining our app's Javascript and CSS code in source code blocks is the only way to get it syntax-highlighted in the exported HTML, and of course we need to be able to insert the raw contents of these source blocks into the exported HTML, so that the browser will make use of them.
+
+Fortunately, Org is smarter than it knows, and provides a couple of lower-level functions, =org-babel-find-named-block= and =org-babel-read-result=, which make it almost trivial to fetch the contents of a source block. We just need to write a little glue code that'll leverage them to fetch the source we need, and a little more that'll wrap that source in a suitable HTML tag. Here's how we do that:
+
+#+NAME: insert-wrapped-source
+#+BEGIN_SRC emacs-lisp :exports code :results silent :var tag="" :var attrs=() :var block-name=""
+  (and (not (string= tag ""))
+       (not (string= block-name ""))
+       (cl-flet ((stringify (alist)
+                            (mapconcat #'identity
+                                       (mapcar #'(lambda (pair)
+                                                   (concat (symbol-name (car pair))
+                                                           "=" "\"" (cdr pair) "\""))
+                                               alist) " ")))
+         (let ((block-loc (org-babel-find-named-block block-name))
+               source)
+           (if (null block-loc)
+               (signal 'no-such-block 
+                       (list (concat "Block '" block-name "' not found in this buffer.")))
+               (save-excursion
+                 (goto-char block-loc)
+                 (setq source (org-babel-read-result))
+                 (concat "<" tag " " (stringify attrs) ">" "\n"
+                         source "\n"
+                         "</" tag ">"))))))
+#+END_SRC
+
+Now that it's defined, we can insert calls to it in our Org file like so:
+
+#+BEGIN_EXAMPLE
+#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="a-javascript-source-block") :results html
+#+END_EXAMPLE
+
+and have Org emit the contents of the named block =a-javascript-source-block=, wrapped in ~<script type="text/javascript">~ and ~</script>~.
+
+* Org source download
+Now that we have our libraries, we can set up an HTML5 download link that'll let you save a copy of this document's Org source without referencing an external file. That's nice because it preserves our ability to distribute this entire application by passing a single file around, and since the HTML export includes a literal copy of the Org source, this lets us easily extract the source back out of the build.
+
+Note that the ~window.OrgDocumentSource~ binding is created by an inline call to the ~expose-to-js~ utility function we defined earlier. If you're reading the HTML version, you won't see the inline call syntax, but you can use a DOM inspector to examine the resulting ~<script />~ element, which immediately follows this text.
+
+#+CALL: expose-to-js(block-name="light-rail-tracker.org",binding="OrgDocumentSource") :results html :exports both
+
+#+NAME: insert-download-link
+#+BEGIN_SRC js :eval never
+  (function() {
+    var clickHandler = function(e) {
+      e.preventDefault();
+      download(window.OrgDocumentSource, 'light-rail-tracker.org', 'text/plain');
+      return false;
+    };
+
+    var container = document.createElement('div');
+    var link = document.createElement('a');
+    var title = 'Download light-rail-tracker.org';
+
+    container.id = "source-download-link-container";
+
+    link.id = "source-download-link";
+    link.href = "";
+    link.title = title;
+    link.textContent = title;
+
+    link.addEventListener('click', clickHandler);
+
+    document.write(container.outerHTML);
+    document.querySelector('div#source-download-link-container')
+      .appendChild(link);
+  })();
+#+END_SRC
+
+It'd be nice to style the download link to look pretty, too, wouldn't it? Let's do that.
+
+#+NAME: download-link-styles
+#+BEGIN_SRC css :eval never
+  div#source-download-link-container {
+    text-align: center;
+  }
+
+  a#source-download-link {
+    display: inline-block;
+    padding: 12px;
+    background: #F0F8FF;
+    border: 3px solid #C0C0F0;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    font-family: sans-serif;
+    font-size: x-large;
+  }
+#+END_SRC
+
+#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="download-link-styles") :results html
+
+And here we are!
+
+#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="insert-download-link") :results html
+
+* UI conveniences
+** Org pre styles
+The default Org-mode template is a little bit incomplete when it comes to the ~<pre>~ tags enclosing source and example blocks. Let's fix that up a little.
+
+While we're at it, let's apply line wrapping to the document source where we include it in itself, so that its many long lines don't require a lot of horizontal scrolling. We'll also get rid of the rather ill-thought-out corner tag that would ordinarily appear when mousing over source blocks with known languages.
+
+#+NAME: pre-styles
+#+BEGIN_SRC css :eval never
+  pre.src, pre.example {
+    background: #002;
+    color: #f0f8ff;
+    overflow-x: auto;
+    padding: 5px;
+    border: black solid 3px;
+    border-radius: 5px;
+  }
+
+  pre#light-rail-tracker\.org {
+    white-space: pre-wrap;
+  }
+
+  pre::before {
+    display: none !important;
+  }
+#+END_SRC
+#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="pre-styles") :results html
+
+** Headline fold/unfold
+This document includes a fairly sizable number of top-level headlines. To simplify navigation, let's make them fold and unfold when clicked or tapped. We'll leave headlines unfolded by default, with an option to override it by giving a headline a ~:folded:~ tag.
+
+Here are the styles that go with that. 
+
+Do note that we're taking the opportunity to clean up a couple of warts with the way Org's default HTML export template handles heading tags, too; that's what the ~span.tag~ stuff is about, mostly. With it in place, we can hide the ~folded~ tag (which has no other purpose in this document, except to start a headline out folded) purely in CSS, without having to modify the DOM at all.
+
+#+NAME: fold-headline-styles
+#+BEGIN_SRC css :eval never
+  /* Basic headline styles */
+
+  h2, h3 {
+    cursor: pointer;
+  }
+
+  h2.folded, h3.folded {
+    color: #444;
+  }
+
+  h2.unfolded, h3.unfolded {
+  }
+
+  /* Hide/show siblings of headlines depending
+   ,* on folded/unfolded state
+   ,*/
+
+  h2.folded ~ *, h3.folded ~ * {
+    display: none;
+  }
+
+  h2.unfolded ~ *, h3.unfolded ~ * {
+    display: block;
+  }
+
+  /* Folded/unfolded indicators */
+
+  h2::before, h3::before {
+    padding-right: 1ex;
+    color: #aad;
+  }
+
+  h2.folded::before, h3.folded::before {
+    content: '▶'
+  }
+
+  h2.unfolded::before, h3.unfolded::before {
+    content: '▼'
+  }
+
+  /* Hide the "folded" tag & clean up around it */
+
+  span.tag span.folded {
+    display: none;
+  }
+
+  span.tag {
+    background: inherit;
+    padding: none;
+  }
+
+  span.tag * {
+    background: #DDF;
+    padding: 2px;
+  }
+
+  div#text-table-of-contents li span.tag span.folded {
+    display: none;
+  }
+
+  /* Avoid display of spaces that export doesn't
+   ,* clean up in TOC links
+   ,*/
+
+  div#text-table-of-contents li a {
+    text-decoration: none;
+  }
+
+#+END_SRC
+#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="fold-headline-styles") :results html
+
+And here's the Javascript to make it work. Thanks to CSS3's capabilities, modifying a headline's style is all we actually have to do to change the fold state of its content, thus:
+
+#+NAME: fold-headline-script
+#+BEGIN_SRC js :eval never
+  window.addEventListener('DOMContentLoaded', function() {
+    var headlines = document.querySelectorAll('h2,h3');
+    var headline;
+    var startsFolded;
+
+    var toggleHeadlineFold = function() {
+      this.classList.toggle('unfolded');
+      this.classList.toggle('folded');
+    };
+
+    for (var i = 0; i < headlines.length; i++) {
+      headline = headlines.item(i);
+
+      startsFolded = headline
+        .querySelector('span.tag > span.folded');
+      
+      if (startsFolded) {
+        headline.classList.add('folded');
+      } else {
+        headline.classList.add('unfolded');
+      }
+      
+      headline.addEventListener('click',
+                                toggleHeadlineFold.bind(headline));
+    };
+  });
+#+END_SRC
+#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="fold-headline-script") :results html
+
+* Application structure overview
+
+* Data sources
+** Station data fixture
+** Track data fixture
+** Train position/status API
+** Station's next four trains API
+
+* Data transformations
+** Station data polyline initializers
+** Track data polyline initializers
+
+* Google map initialization
+** Instantiate the map
+** Add track polylines
+** Add station polylines
+
+* Train status updates
+** Define train info update function
+- Get train API
+- Render trains as map markers
+** Invoke it on an interval
+
+* User position handling
+** Define user position update function
+- Get user position
+- Render it as a map marker
+- Find closest station
+- Center the map at midpoint between user & closest station
+- Zoom the map to show user & closest station
+** Invoke it on an interval
+
+* UI miscellany
+** Views
+- App view: map takes up whole viewport
+- Org view: map fits into document flow so that app document is visible
+#+NAME: map-views
+#+BEGIN_SRC css :eval never
+  .map-container.app-view {
+    z-index: 1000;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+  }
+
+  .map-container.org-view {
+    position: static;
+    width: 100%;
+    height: 600px;
+  }
+#+END_SRC
+#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="map-views") :results html
+** View toggle
+- A fixed-position overlay button to switch between app & org view
+
+* App activation
+- Switch to app view
+
+* Org source                                        :folded:
+This is the complete source of the Org-mode document from which this file was generated.
+
+#+NAME: light-rail-tracker.org
+#+INCLUDE: "./light-rail-tracker.org" src org
+
+* COMMENT File-local variables
+There are a lot of source blocks in this file. Having to answer a prompt before each one is evaluated gets old fast. Thus we set ~org-confirm-babel-evaluate~ to ~nil~, so that those prompts won't occur.
+
+When loading this file in Emacs, it will prompt before setting the value, because *this is an extremely risky file-local variable* -- specifically, if you do this in a file of untrusted code, all of said code will execute during export or when you invoke ~org-babel-execute-buffer~. Therefore, if you have any doubts about whether the code in a file is trustworthy, don't let it set this value.
+
+Of course, my code in this file isn't out to hose you -- but, for your sake, I really hope you won't take my word for that.
+
+# Local Variables:
+# org-confirm-babel-evaluate: nil
+# End:

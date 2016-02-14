@@ -1,0 +1,1441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Baltimore Light Rail tracker</title>
+<!-- 2016-02-14 Sun 16:15 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Aaron Miller &lt;me@aaron-miller.me&gt;" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Baltimore Light Rail tracker</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Introduction</a>
+<ul>
+<li><a href="#sec-1-1">1.1. What is this?</a></li>
+<li><a href="#sec-1-2">1.2. OK, but what <i>is</i> this?</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. External libraries</a></li>
+<li><a href="#sec-3">3. Utility functions</a>
+<ul>
+<li><a href="#sec-3-1">3.1. expose-to-js</a></li>
+<li><a href="#sec-3-2">3.2. insert-wrapped-source</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. Org source download</a></li>
+<li><a href="#sec-5">5. UI conveniences</a>
+<ul>
+<li><a href="#sec-5-1">5.1. Org pre styles</a></li>
+<li><a href="#sec-5-2">5.2. Headline fold/unfold</a></li>
+</ul>
+</li>
+<li><a href="#sec-6">6. Application structure overview</a></li>
+<li><a href="#sec-7">7. Data sources</a>
+<ul>
+<li><a href="#sec-7-1">7.1. Station data fixture</a></li>
+<li><a href="#sec-7-2">7.2. Track data fixture</a></li>
+<li><a href="#sec-7-3">7.3. Train position/status API</a></li>
+<li><a href="#sec-7-4">7.4. Station's next four trains API</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">8. Data transformations</a>
+<ul>
+<li><a href="#sec-8-1">8.1. Station data polyline initializers</a></li>
+<li><a href="#sec-8-2">8.2. Track data polyline initializers</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">9. Google map initialization</a>
+<ul>
+<li><a href="#sec-9-1">9.1. Instantiate the map</a></li>
+<li><a href="#sec-9-2">9.2. Add track polylines</a></li>
+<li><a href="#sec-9-3">9.3. Add station polylines</a></li>
+</ul>
+</li>
+<li><a href="#sec-10">10. Train status updates</a>
+<ul>
+<li><a href="#sec-10-1">10.1. Define train info update function</a></li>
+<li><a href="#sec-10-2">10.2. Invoke it on an interval</a></li>
+</ul>
+</li>
+<li><a href="#sec-11">11. User position handling</a>
+<ul>
+<li><a href="#sec-11-1">11.1. Define user position update function</a></li>
+<li><a href="#sec-11-2">11.2. Invoke it on an interval</a></li>
+</ul>
+</li>
+<li><a href="#sec-12">12. UI miscellany</a>
+<ul>
+<li><a href="#sec-12-1">12.1. Views</a></li>
+<li><a href="#sec-12-2">12.2. View toggle</a></li>
+</ul>
+</li>
+<li><a href="#sec-13">13. App activation</a></li>
+<li><a href="#sec-14">14. Org source&#xa0;&#xa0;&#xa0;<span class="tag"><span class="folded">folded</span></span></a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> What is this?</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+It's a single-page web application which integrates a variety of APIs to produce a map showing:<br  />
+</p>
+<ul class="org-ul">
+<li>The Baltimore light rail lines and stations<br  />
+</li>
+<li>If you allow geolocation access, the closest station to your current location<br  />
+</li>
+<li>Real-time positions of trains currently in service<br  />
+</li>
+<li>ETA information for trains arriving at the station nearest you<br  />
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> OK, but what <i>is</i> this?</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+It's an Emacs Org-mode file that embodies the aforementioned single-page web application, written in the literate programming style. Exporting this file to HTML, using Org-mode's core export functionality, produces a build of the web application which you can host on your favorite server and use in your favorite browser.<br  />
+</p>
+
+<p>
+The best way to read this document is in Emacs with Org 8.x and the Org and Emacs Lisp reference manuals installed. That way, you get the full benefit of this powerful programming environment, in which, for example, the full source and documentation of any Emacs Lisp function is just a few keystrokes away. (If you're wondering: <code>C-h f RET</code> while point is on the function name, then <code>TAB RET</code> in the <code>*Help*</code> buffer.)<br  />
+</p>
+
+<p>
+Failing that, you'll probably get the most benefit out of this document if you come to it with a basic understanding of both Org mode and Emacs Lisp; the former, of course, since the document is written in it, and the latter so that you can understand what's going on in the Emacs Lisp utility functions used throughout this document.<br  />
+</p>
+
+<p>
+That said, if you're totally unfamiliar with everything I've just mentioned, there's probably still something for you here. If nothing else, maybe an example of literate programming might come in handy. In any case, enjoy! And if you have questions, don't hesitate to <a href="mailto:me@aaron-miller.me">ask</a>.<br  />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> External libraries</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Our app depends on a few externally hosted Javascript libraries, so let's go ahead and include them in the HTML document.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-html" id="external-library-refs">&lt;<span style="color: #00bfff;">script</span> <span style="color: #eedd82;">type</span>=<span style="color: #dda0dd;">"text/javascript"</span>
+        <span style="color: #eedd82;">src</span>=<span style="color: #dda0dd;">"http://danml.com/js/download.js"</span>&gt;&lt;/<span style="color: #00bfff;">script</span>&gt;
+</pre>
+</div>
+
+<div >
+<script type="text/javascript"
+          src="http://danml.com/js/download.js"></script>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Utility functions</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> expose-to-js</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp" id="expose-to-js">(and (not (string= block-name <span style="color: #dda0dd;">""</span>))
+     (not (string= binding <span style="color: #dda0dd;">""</span>))
+     (<span style="color: #4f94cd; font-style: italic;">save-excursion</span>
+       (<span style="color: #4f94cd; font-style: italic;">let</span> ((json-encoding-pretty-print t)
+             (block-lang <span style="color: #dda0dd;">""</span>)
+             block-loc block-type from to
+             block-contents cg-handle html-result)
+         <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Expand #+INCLUDE: keywords so that they become named</span>
+         <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">blocks we can find. Since this expansion mutates the</span>
+         <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">buffer contents, we do it within a change group so that it</span>
+         <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">can be atomically reverted once we're done.</span>
+         (setq cg-handle (prepare-change-group))
+         (activate-change-group cg-handle)
+         (org-export-expand-include-keyword)
+         (<span style="color: #4f94cd; font-style: italic;">unwind-protect</span>
+              (setq block-loc (org-babel-find-named-block block-name))
+           (<span style="color: #4f94cd; font-style: italic;">if</span> (null block-loc)
+               (<span style="color: #ffc0cb; font-weight: bold;">signal</span> 'no-such-block
+                       (list (concat <span style="color: #dda0dd;">"Block '"</span> block-name
+                                     <span style="color: #dda0dd;">"' not found in this buffer."</span>)))
+               (<span style="color: #4f94cd; font-style: italic;">progn</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Go to start of block (beginning of #+NAME: line)</span>
+                 (goto-char block-loc)
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Find out what kind of block we're dealing with here,</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">so we can correctly find its end keyword</span>
+                 (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                   (re-search-forward <span style="color: #dda0dd;">"^#\\+BEGIN_</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">[A-Za-z]+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span>)
+                   (setq block-type
+                         (downcase (buffer-substring-no-properties
+                                    (match-beginning 1) (match-end 1)))))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Also capture the block language, if any, so that</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">we know what (if any) kind of unescaping we need</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">to do</span>
+                 (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                   (and (re-search-forward <span style="color: #dda0dd;">" *</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">[_[:alnum:]]+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span> nil t)
+                        (setq block-lang
+                              (buffer-substring-no-properties
+                               (match-beginning 1) (match-end 1)))))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Move ahead to the beginning of the first line in the</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">actual source, and store that as the character</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">position where we'll start capturing</span>
+                 (end-of-line)
+                 (forward-char 1)
+                 (setq from (point))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Move ahead to the end of the code block, and store</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">that as the character position where we'll stop</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">capturing</span>
+                 (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                   (re-search-forward (concat <span style="color: #dda0dd;">"^#\\+END_"</span> block-type <span style="color: #dda0dd;">"$"</span>)))
+                 (beginning-of-line)
+                 (setq to (point))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Unescape Org keywords within the source block, if</span>
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">this is an Org source block</span>
+                 (and (string= <span style="color: #dda0dd;">"org"</span> block-lang)
+                      (<span style="color: #4f94cd; font-style: italic;">progn</span>
+                        (goto-char from)
+                        (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                          (<span style="color: #4f94cd; font-style: italic;">while</span> (and (not (&gt; (point) to))
+                                      (re-search-forward <span style="color: #dda0dd;">"^</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;"> *</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">,</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">#\\+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">|</span><span style="color: #dda0dd;">\\*</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span>
+                                                         to t))
+                            (replace-match <span style="color: #dda0dd;">"\\1\\2"</span>)
+                            (setq to (- to 1))))))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Capture the source block contents...</span>
+                 (setq block-contents
+                       (buffer-substring-no-properties from to))
+                 <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">...and put together a string with the &lt;script&gt; tag</span>
+                 (setq html-result
+                       (concat <span style="color: #dda0dd;">"&lt;script type=\"text/javascript\"&gt;"</span> <span style="color: #dda0dd;">"\n"</span>
+                               <span style="color: #dda0dd;">"window."</span> binding
+                               <span style="color: #dda0dd;">" = "</span>
+                               (json-encode block-contents) <span style="color: #dda0dd;">";"</span>
+                               <span style="color: #dda0dd;">"\n"</span>
+                               <span style="color: #dda0dd;">"&lt;/script&gt;"</span>))
+                 (cancel-change-group cg-handle)))
+           <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Make sure we don't leave the buffer mutated if we signal</span>
+           <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">(this is the `</span><span style="color: #7fffd4; font-style: italic;">unwind-protect</span><span style="color: #00cd00; font-style: italic;">''s unwind form)</span>
+           (cancel-change-group cg-handle))
+         <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Finally, return the HTML string</span>
+         html-result)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> insert-wrapped-source</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Org-mode doesn't currently support syntax highlighting in example blocks, and also doesn't support named references to the literal content of a source block (rather than the results of evaluating that source block).<br  />
+</p>
+
+<p>
+This is a pain in the neck for us, because we want to do both of these things. Defining our app's Javascript and CSS code in source code blocks is the only way to get it syntax-highlighted in the exported HTML, and of course we need to be able to insert the raw contents of these source blocks into the exported HTML, so that the browser will make use of them.<br  />
+</p>
+
+<p>
+Fortunately, Org is smarter than it knows, and provides a couple of lower-level functions, <code>org-babel-find-named-block</code> and <code>org-babel-read-result</code>, which make it almost trivial to fetch the contents of a source block. We just need to write a little glue code that'll leverage them to fetch the source we need, and a little more that'll wrap that source in a suitable HTML tag. Here's how we do that:<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp" id="insert-wrapped-source">(and (not (string= tag <span style="color: #dda0dd;">""</span>))
+     (not (string= block-name <span style="color: #dda0dd;">""</span>))
+     (<span style="color: #4f94cd; font-style: italic;">cl-flet</span> ((stringify (alist)
+                          (mapconcat #'identity
+                                     (mapcar #'(<span style="color: #4f94cd; font-style: italic;">lambda</span> (pair)
+                                                 (concat (symbol-name (car pair))
+                                                         <span style="color: #dda0dd;">"="</span> <span style="color: #dda0dd;">"\""</span> (cdr pair) <span style="color: #dda0dd;">"\""</span>))
+                                             alist) <span style="color: #dda0dd;">" "</span>)))
+       (<span style="color: #4f94cd; font-style: italic;">let</span> ((block-loc (org-babel-find-named-block block-name))
+             source)
+         (<span style="color: #4f94cd; font-style: italic;">if</span> (null block-loc)
+             (<span style="color: #ffc0cb; font-weight: bold;">signal</span> 'no-such-block 
+                     (list (concat <span style="color: #dda0dd;">"Block '"</span> block-name <span style="color: #dda0dd;">"' not found in this buffer."</span>)))
+             (<span style="color: #4f94cd; font-style: italic;">save-excursion</span>
+               (goto-char block-loc)
+               (setq source (org-babel-read-result))
+               (concat <span style="color: #dda0dd;">"&lt;"</span> tag <span style="color: #dda0dd;">" "</span> (stringify attrs) <span style="color: #dda0dd;">"&gt;"</span> <span style="color: #dda0dd;">"\n"</span>
+                       source <span style="color: #dda0dd;">"\n"</span>
+                       <span style="color: #dda0dd;">"&lt;/"</span> tag <span style="color: #dda0dd;">"&gt;"</span>))))))
+</pre>
+</div>
+
+<p>
+Now that it's defined, we can insert calls to it in our Org file like so:<br  />
+</p>
+
+<pre class="example">
+#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="a-javascript-source-block") :results html
+</pre>
+
+<p>
+and have Org emit the contents of the named block <code>a-javascript-source-block</code>, wrapped in <code>&lt;script type="text/javascript"&gt;</code> and <code>&lt;/script&gt;</code>.<br  />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Org source download</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Now that we have our libraries, we can set up an HTML5 download link that'll let you save a copy of this document's Org source without referencing an external file. That's nice because it preserves our ability to distribute this entire application by passing a single file around, and since the HTML export includes a literal copy of the Org source, this lets us easily extract the source back out of the build.<br  />
+</p>
+
+<p>
+Note that the <code>window.OrgDocumentSource</code> binding is created by an inline call to the <code>expose-to-js</code> utility function we defined earlier. If you're reading the HTML version, you won't see the inline call syntax, but you can use a DOM inspector to examine the resulting <code>&lt;script /&gt;</code> element, which immediately follows this text.<br  />
+</p>
+
+<script type="text/javascript">
+window.OrgDocumentSource = "#+TITLE: Baltimore Light Rail tracker\n#+AUTHOR: Aaron Miller <me@aaron-miller.me>\n#+LANGUAGE: en\n#+OPTIONS: \\n:t\n\n* Introduction\n\n** What is this?\nIt's a single-page web application which integrates a variety of APIs to produce a map showing:\n- The Baltimore light rail lines and stations\n- If you allow geolocation access, the closest station to your current location\n- Real-time positions of trains currently in service\n- ETA information for trains arriving at the station nearest you\n\n** OK, but what \/is\/ this?\nIt's an Emacs Org-mode file that embodies the aforementioned single-page web application, written in the literate programming style. Exporting this file to HTML, using Org-mode's core export functionality, produces a build of the web application which you can host on your favorite server and use in your favorite browser.\n\nThe best way to read this document is in Emacs with Org 8.x and the Org and Emacs Lisp reference manuals installed. That way, you get the full benefit of this powerful programming environment, in which, for example, the full source and documentation of any Emacs Lisp function is just a few keystrokes away. (If you're wondering: =C-h f RET= while point is on the function name, then =TAB RET= in the ~*Help*~ buffer.)\n\nFailing that, you'll probably get the most benefit out of this document if you come to it with a basic understanding of both Org mode and Emacs Lisp; the former, of course, since the document is written in it, and the latter so that you can understand what's going on in the Emacs Lisp utility functions used throughout this document.\n\nThat said, if you're totally unfamiliar with everything I've just mentioned, there's probably still something for you here. If nothing else, maybe an example of literate programming might come in handy. In any case, enjoy! And if you have questions, don't hesitate to [[mailto:me@aaron-miller.me][ask]].\n\n* External libraries\nOur app depends on a few externally hosted Javascript libraries, so let's go ahead and include them in the HTML document.\n\n#+NAME: external-library-refs\n#+BEGIN_SRC html :eval never\n  <script type=\"text\/javascript\"\n          src=\"http:\/\/danml.com\/js\/download.js\"><\/script>\n#+END_SRC\n\n#+CALL: insert-wrapped-source(tag=\"div\",block-name=\"external-library-refs\") :results html\n\n* Utility functions\n\n** expose-to-js\nWe'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.\n\n#+NAME: expose-to-js\n#+BEGIN_SRC emacs-lisp :exports code :results silent :var block-name=\"\" :var binding=\"\"\n    (and (not (string= block-name \"\"))\n         (not (string= binding \"\"))\n         (save-excursion\n           (let ((json-encoding-pretty-print t)\n                 (block-lang \"\")\n                 block-loc block-type from to\n                 block-contents cg-handle html-result)\n             ;; Expand #+INCLUDE: keywords so that they become named\n             ;; blocks we can find. Since this expansion mutates the\n             ;; buffer contents, we do it within a change group so that it\n             ;; can be atomically reverted once we're done.\n             (setq cg-handle (prepare-change-group))\n             (activate-change-group cg-handle)\n             (org-export-expand-include-keyword)\n             (unwind-protect\n                  (setq block-loc (org-babel-find-named-block block-name))\n               (if (null block-loc)\n                   (signal 'no-such-block\n                           (list (concat \"Block '\" block-name\n                                         \"' not found in this buffer.\")))\n                   (progn\n                     ;; Go to start of block (beginning of #+NAME: line)\n                     (goto-char block-loc)\n                     ;; Find out what kind of block we're dealing with here,\n                     ;; so we can correctly find its end keyword\n                     (save-match-data\n                       (re-search-forward \"^#\\\\+BEGIN_\\\\([A-Za-z]+\\\\)\")\n                       (setq block-type\n                             (downcase (buffer-substring-no-properties\n                                        (match-beginning 1) (match-end 1)))))\n                     ;; Also capture the block language, if any, so that\n                     ;; we know what (if any) kind of unescaping we need\n                     ;; to do\n                     (save-match-data\n                       (and (re-search-forward \" *\\\\([_[:alnum:]]+\\\\)\" nil t)\n                            (setq block-lang\n                                  (buffer-substring-no-properties\n                                   (match-beginning 1) (match-end 1)))))\n                     ;; Move ahead to the beginning of the first line in the\n                     ;; actual source, and store that as the character\n                     ;; position where we'll start capturing\n                     (end-of-line)\n                     (forward-char 1)\n                     (setq from (point))\n                     ;; Move ahead to the end of the code block, and store\n                     ;; that as the character position where we'll stop\n                     ;; capturing\n                     (save-match-data\n                       (re-search-forward (concat \"^#\\\\+END_\" block-type \"$\")))\n                     (beginning-of-line)\n                     (setq to (point))\n                     ;; Unescape Org keywords within the source block, if\n                     ;; this is an Org source block\n                     (and (string= \"org\" block-lang)\n                          (progn\n                            (goto-char from)\n                            (save-match-data\n                              (while (and (not (> (point) to))\n                                          (re-search-forward \"^\\\\( *\\\\),\\\\(#\\\\+\\\\|\\\\*\\\\)\"\n                                                             to t))\n                                (replace-match \"\\\\1\\\\2\")\n                                (setq to (- to 1))))))\n                     ;; Capture the source block contents...\n                     (setq block-contents\n                           (buffer-substring-no-properties from to))\n                     ;; ...and put together a string with the <script> tag\n                     (setq html-result\n                           (concat \"<script type=\\\"text\/javascript\\\">\" \"\\n\"\n                                   \"window.\" binding\n                                   \" = \"\n                                   (json-encode block-contents) \";\"\n                                   \"\\n\"\n                                   \"<\/script>\"))\n                     (cancel-change-group cg-handle)))\n               ;; Make sure we don't leave the buffer mutated if we signal\n               ;; (this is the `unwind-protect''s unwind form)\n               (cancel-change-group cg-handle))\n             ;; Finally, return the HTML string\n             html-result)))\n#+END_SRC\n\n** insert-wrapped-source\nOrg-mode doesn't currently support syntax highlighting in example blocks, and also doesn't support named references to the literal content of a source block (rather than the results of evaluating that source block).\n\nThis is a pain in the neck for us, because we want to do both of these things. Defining our app's Javascript and CSS code in source code blocks is the only way to get it syntax-highlighted in the exported HTML, and of course we need to be able to insert the raw contents of these source blocks into the exported HTML, so that the browser will make use of them.\n\nFortunately, Org is smarter than it knows, and provides a couple of lower-level functions, =org-babel-find-named-block= and =org-babel-read-result=, which make it almost trivial to fetch the contents of a source block. We just need to write a little glue code that'll leverage them to fetch the source we need, and a little more that'll wrap that source in a suitable HTML tag. Here's how we do that:\n\n#+NAME: insert-wrapped-source\n#+BEGIN_SRC emacs-lisp :exports code :results silent :var tag=\"\" :var attrs=() :var block-name=\"\"\n  (and (not (string= tag \"\"))\n       (not (string= block-name \"\"))\n       (cl-flet ((stringify (alist)\n                            (mapconcat #'identity\n                                       (mapcar #'(lambda (pair)\n                                                   (concat (symbol-name (car pair))\n                                                           \"=\" \"\\\"\" (cdr pair) \"\\\"\"))\n                                               alist) \" \")))\n         (let ((block-loc (org-babel-find-named-block block-name))\n               source)\n           (if (null block-loc)\n               (signal 'no-such-block \n                       (list (concat \"Block '\" block-name \"' not found in this buffer.\")))\n               (save-excursion\n                 (goto-char block-loc)\n                 (setq source (org-babel-read-result))\n                 (concat \"<\" tag \" \" (stringify attrs) \">\" \"\\n\"\n                         source \"\\n\"\n                         \"<\/\" tag \">\"))))))\n#+END_SRC\n\nNow that it's defined, we can insert calls to it in our Org file like so:\n\n#+BEGIN_EXAMPLE\n#+CALL: insert-wrapped-source(tag=\"script\",attrs='((type . \"text\/javascript\")),block-name=\"a-javascript-source-block\") :results html\n#+END_EXAMPLE\n\nand have Org emit the contents of the named block =a-javascript-source-block=, wrapped in ~<script type=\"text\/javascript\">~ and ~<\/script>~.\n\n* Org source download\nNow that we have our libraries, we can set up an HTML5 download link that'll let you save a copy of this document's Org source without referencing an external file. That's nice because it preserves our ability to distribute this entire application by passing a single file around, and since the HTML export includes a literal copy of the Org source, this lets us easily extract the source back out of the build.\n\nNote that the ~window.OrgDocumentSource~ binding is created by an inline call to the ~expose-to-js~ utility function we defined earlier. If you're reading the HTML version, you won't see the inline call syntax, but you can use a DOM inspector to examine the resulting ~<script \/>~ element, which immediately follows this text.\n\n#+CALL: expose-to-js(block-name=\"light-rail-tracker.org\",binding=\"OrgDocumentSource\") :results html :exports both\n\n#+NAME: insert-download-link\n#+BEGIN_SRC js :eval never\n  (function() {\n    var clickHandler = function(e) {\n      e.preventDefault();\n      download(window.OrgDocumentSource, 'light-rail-tracker.org', 'text\/plain');\n      return false;\n    };\n\n    var container = document.createElement('div');\n    var link = document.createElement('a');\n    var title = 'Download light-rail-tracker.org';\n\n    container.id = \"source-download-link-container\";\n\n    link.id = \"source-download-link\";\n    link.href = \"\";\n    link.title = title;\n    link.textContent = title;\n\n    link.addEventListener('click', clickHandler);\n\n    document.write(container.outerHTML);\n    document.querySelector('div#source-download-link-container')\n      .appendChild(link);\n  })();\n#+END_SRC\n\nIt'd be nice to style the download link to look pretty, too, wouldn't it? Let's do that.\n\n#+NAME: download-link-styles\n#+BEGIN_SRC css :eval never\n  div#source-download-link-container {\n    text-align: center;\n  }\n\n  a#source-download-link {\n    display: inline-block;\n    padding: 12px;\n    background: #F0F8FF;\n    border: 3px solid #C0C0F0;\n    border-radius: 10px;\n    text-decoration: none;\n    color: black;\n    font-family: sans-serif;\n    font-size: x-large;\n  }\n#+END_SRC\n\n#+CALL: insert-wrapped-source(tag=\"style\",attrs='((type . \"text\/css\")),block-name=\"download-link-styles\") :results html\n\nAnd here we are!\n\n#+CALL: insert-wrapped-source(tag=\"script\",attrs='((type . \"text\/javascript\")),block-name=\"insert-download-link\") :results html\n\n* UI conveniences\n** Org pre styles\nThe default Org-mode template is a little bit incomplete when it comes to the ~<pre>~ tags enclosing source and example blocks. Let's fix that up a little.\n\nWhile we're at it, let's apply line wrapping to the document source where we include it in itself, so that its many long lines don't require a lot of horizontal scrolling. We'll also get rid of the rather ill-thought-out corner tag that would ordinarily appear when mousing over source blocks with known languages.\n\n#+NAME: pre-styles\n#+BEGIN_SRC css :eval never\n  pre.src, pre.example {\n    background: #002;\n    color: #f0f8ff;\n    overflow-x: auto;\n    padding: 5px;\n    border: black solid 3px;\n    border-radius: 5px;\n  }\n\n  pre#light-rail-tracker\\.org {\n    white-space: pre-wrap;\n  }\n\n  pre::before {\n    display: none !important;\n  }\n#+END_SRC\n#+CALL: insert-wrapped-source(tag=\"style\",attrs='((type . \"text\/css\")),block-name=\"pre-styles\") :results html\n\n** Headline fold\/unfold\nThis document includes a fairly sizable number of top-level headlines. To simplify navigation, let's make them fold and unfold when clicked or tapped. We'll leave headlines unfolded by default, with an option to override it by giving a headline a ~:folded:~ tag.\n\nHere are the styles that go with that. \n\nDo note that we're taking the opportunity to clean up a couple of warts with the way Org's default HTML export template handles heading tags, too; that's what the ~span.tag~ stuff is about, mostly. With it in place, we can hide the ~folded~ tag (which has no other purpose in this document, except to start a headline out folded) purely in CSS, without having to modify the DOM at all.\n\n#+NAME: fold-headline-styles\n#+BEGIN_SRC css :eval never\n  \/* Basic headline styles *\/\n\n  h2, h3 {\n    cursor: pointer;\n  }\n\n  h2.folded, h3.folded {\n    color: #444;\n  }\n\n  h2.unfolded, h3.unfolded {\n  }\n\n  \/* Hide\/show siblings of headlines depending\n   ,,* on folded\/unfolded state\n   ,,*\/\n\n  h2.folded ~ *, h3.folded ~ * {\n    display: none;\n  }\n\n  h2.unfolded ~ *, h3.unfolded ~ * {\n    display: block;\n  }\n\n  \/* Folded\/unfolded indicators *\/\n\n  h2::before, h3::before {\n    padding-right: 1ex;\n    color: #aad;\n  }\n\n  h2.folded::before, h3.folded::before {\n    content: '\u25b6'\n  }\n\n  h2.unfolded::before, h3.unfolded::before {\n    content: '\u25bc'\n  }\n\n  \/* Hide the \"folded\" tag & clean up around it *\/\n\n  span.tag span.folded {\n    display: none;\n  }\n\n  span.tag {\n    background: inherit;\n    padding: none;\n  }\n\n  span.tag * {\n    background: #DDF;\n    padding: 2px;\n  }\n\n  div#text-table-of-contents li span.tag span.folded {\n    display: none;\n  }\n\n  \/* Avoid display of spaces that export doesn't\n   ,,* clean up in TOC links\n   ,,*\/\n\n  div#text-table-of-contents li a {\n    text-decoration: none;\n  }\n\n#+END_SRC\n#+CALL: insert-wrapped-source(tag=\"style\",attrs='((type . \"text\/css\")),block-name=\"fold-headline-styles\") :results html\n\nAnd here's the Javascript to make it work. Thanks to CSS3's capabilities, modifying a headline's style is all we actually have to do to change the fold state of its content, thus:\n\n#+NAME: fold-headline-script\n#+BEGIN_SRC js :eval never\n  window.addEventListener('DOMContentLoaded', function() {\n    var headlines = document.querySelectorAll('h2,h3');\n    var headline;\n    var startsFolded;\n\n    var toggleHeadlineFold = function() {\n      this.classList.toggle('unfolded');\n      this.classList.toggle('folded');\n    };\n\n    for (var i = 0; i < headlines.length; i++) {\n      headline = headlines.item(i);\n\n      startsFolded = headline\n        .querySelector('span.tag > span.folded');\n      \n      if (startsFolded) {\n        headline.classList.add('folded');\n      } else {\n        headline.classList.add('unfolded');\n      }\n      \n      headline.addEventListener('click',\n                                toggleHeadlineFold.bind(headline));\n    };\n  });\n#+END_SRC\n#+CALL: insert-wrapped-source(tag=\"script\",attrs='((type . \"text\/javascript\")),block-name=\"fold-headline-script\") :results html\n\n* Application structure overview\n\n* Data sources\n** Station data fixture\n** Track data fixture\n** Train position\/status API\n** Station's next four trains API\n\n* Data transformations\n** Station data polyline initializers\n** Track data polyline initializers\n\n* Google map initialization\n** Instantiate the map\n** Add track polylines\n** Add station polylines\n\n* Train status updates\n** Define train info update function\n- Get train API\n- Render trains as map markers\n** Invoke it on an interval\n\n* User position handling\n** Define user position update function\n- Get user position\n- Render it as a map marker\n- Find closest station\n- Center the map at midpoint between user & closest station\n- Zoom the map to show user & closest station\n** Invoke it on an interval\n\n* UI miscellany\n** Views\n- App view: map takes up whole viewport\n- Org view: map fits into document flow so that app document is visible\n#+NAME: map-views\n#+BEGIN_SRC css :eval never\n  .map-container.app-view {\n    z-index: 1000;\n    position: fixed;\n    left: 0px;\n    right: 0px;\n    top: 0px;\n    bottom: 0px;\n  }\n\n  .map-container.org-view {\n    position: static;\n    width: 100%;\n    height: 600px;\n  }\n#+END_SRC\n#+CALL: insert-wrapped-source(tag=\"style\",attrs='((type . \"text\/css\")),block-name=\"map-views\") :results html\n** View toggle\n- A fixed-position overlay button to switch between app & org view\n\n* App activation\n- Switch to app view\n\n* Org source                                        :folded:\nThis is the complete source of the Org-mode document from which this file was generated.\n\n#+NAME: light-rail-tracker.org\n#+INCLUDE: \".\/light-rail-tracker.org\" src org\n\n* COMMENT File-local variables\nThere are a lot of source blocks in this file. Having to answer a prompt before each one is evaluated gets old fast. Thus we set ~org-confirm-babel-evaluate~ to ~nil~, so that those prompts won't occur.\n\nWhen loading this file in Emacs, it will prompt before setting the value, because *this is an extremely risky file-local variable* -- specifically, if you do this in a file of untrusted code, all of said code will execute during export or when you invoke ~org-babel-execute-buffer~. Therefore, if you have any doubts about whether the code in a file is trustworthy, don't let it set this value.\n\nOf course, my code in this file isn't out to hose you -- but, for your sake, I really hope you won't take my word for that.\n\n# Local Variables:\n# org-confirm-babel-evaluate: nil\n# End:\n";
+</script>
+
+<div class="org-src-container">
+
+<pre class="src src-js" id="insert-download-link">(<span style="color: #4f94cd; font-style: italic;">function</span>() {
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">clickHandler</span> = <span style="color: #4f94cd; font-style: italic;">function</span>(<span style="color: #eedd82;">e</span>) {
+    e.preventDefault();
+    download(window.OrgDocumentSource, <span style="color: #dda0dd;">'light-rail-tracker.org'</span>, <span style="color: #dda0dd;">'text/plain'</span>);
+    <span style="color: #4f94cd; font-style: italic;">return</span> <span style="color: #7fffd4;">false</span>;
+  };
+
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">container</span> = document.createElement(<span style="color: #dda0dd;">'div'</span>);
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">link</span> = document.createElement(<span style="color: #dda0dd;">'a'</span>);
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">title</span> = <span style="color: #dda0dd;">'Download light-rail-tracker.org'</span>;
+
+  container.id = <span style="color: #dda0dd;">"source-download-link-container"</span>;
+
+  link.id = <span style="color: #dda0dd;">"source-download-link"</span>;
+  link.href = <span style="color: #dda0dd;">""</span>;
+  link.title = title;
+  link.textContent = title;
+
+  link.addEventListener(<span style="color: #dda0dd;">'click'</span>, clickHandler);
+
+  document.write(container.outerHTML);
+  document.querySelector(<span style="color: #dda0dd;">'div#source-download-link-container'</span>)
+    .appendChild(link);
+})();
+</pre>
+</div>
+
+<p>
+It'd be nice to style the download link to look pretty, too, wouldn't it? Let's do that.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-css" id="download-link-styles"><span style="color: #00bfff;">div#source-download-link-container </span>{
+  <span style="color: #eedd82;">text-align</span>: center;
+}
+
+<span style="color: #00bfff;">a#source-download-link </span>{
+  <span style="color: #eedd82;">display</span>: inline-block;
+  <span style="color: #eedd82;">padding</span>: 12px;
+  <span style="color: #eedd82;">background</span>: #F0F8FF;
+  <span style="color: #eedd82;">border</span>: 3px solid #C0C0F0;
+  <span style="color: #eedd82;">border-radius</span>: 10px;
+  <span style="color: #eedd82;">text-decoration</span>: none;
+  <span style="color: #eedd82;">color</span>: black;
+  <span style="color: #eedd82;">font-family</span>: sans-serif;
+  <span style="color: #eedd82;">font-size</span>: x-large;
+}
+</pre>
+</div>
+
+<style type="text/css">
+div#source-download-link-container {
+    text-align: center;
+  }
+
+  a#source-download-link {
+    display: inline-block;
+    padding: 12px;
+    background: #F0F8FF;
+    border: 3px solid #C0C0F0;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    font-family: sans-serif;
+    font-size: x-large;
+  }
+</style>
+
+<p>
+And here we are!<br  />
+</p>
+
+<script type="text/javascript">
+(function() {
+    var clickHandler = function(e) {
+      e.preventDefault();
+      download(window.OrgDocumentSource, 'light-rail-tracker.org', 'text/plain');
+      return false;
+    };
+
+    var container = document.createElement('div');
+    var link = document.createElement('a');
+    var title = 'Download light-rail-tracker.org';
+
+    container.id = "source-download-link-container";
+
+    link.id = "source-download-link";
+    link.href = "";
+    link.title = title;
+    link.textContent = title;
+
+    link.addEventListener('click', clickHandler);
+
+    document.write(container.outerHTML);
+    document.querySelector('div#source-download-link-container')
+      .appendChild(link);
+  })();
+</script>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> UI conveniences</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Org pre styles</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+The default Org-mode template is a little bit incomplete when it comes to the <code>&lt;pre&gt;</code> tags enclosing source and example blocks. Let's fix that up a little.<br  />
+</p>
+
+<p>
+While we're at it, let's apply line wrapping to the document source where we include it in itself, so that its many long lines don't require a lot of horizontal scrolling. We'll also get rid of the rather ill-thought-out corner tag that would ordinarily appear when mousing over source blocks with known languages.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-css" id="pre-styles"><span style="color: #00bfff;">pre.src, pre.example </span>{
+  <span style="color: #eedd82;">background</span>: #002;
+  <span style="color: #eedd82;">color</span>: #f0f8ff;
+  <span style="color: #eedd82;">overflow-x</span>: auto;
+  <span style="color: #eedd82;">padding</span>: 5px;
+  <span style="color: #eedd82;">border</span>: black solid 3px;
+  <span style="color: #eedd82;">border-radius</span>: 5px;
+}
+
+<span style="color: #00bfff;">pre#light-rail-tracker\.org </span>{
+  <span style="color: #eedd82;">white-space</span>: pre-wrap;
+}
+
+<span style="color: #eedd82;">pre</span>::before {
+  <span style="color: #eedd82;">display</span>: none <span style="color: #b0c4de;">!important</span>;
+}
+</pre>
+</div>
+<style type="text/css">
+pre.src, pre.example {
+    background: #002;
+    color: #f0f8ff;
+    overflow-x: auto;
+    padding: 5px;
+    border: black solid 3px;
+    border-radius: 5px;
+  }
+
+  pre#light-rail-tracker\.org {
+    white-space: pre-wrap;
+  }
+
+  pre::before {
+    display: none !important;
+  }
+</style>
+</div>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Headline fold/unfold</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+This document includes a fairly sizable number of top-level headlines. To simplify navigation, let's make them fold and unfold when clicked or tapped. We'll leave headlines unfolded by default, with an option to override it by giving a headline a <code>:folded:</code> tag.<br  />
+</p>
+
+<p>
+Here are the styles that go with that.<br  />
+</p>
+
+<p>
+Do note that we're taking the opportunity to clean up a couple of warts with the way Org's default HTML export template handles heading tags, too; that's what the <code>span.tag</code> stuff is about, mostly. With it in place, we can hide the <code>folded</code> tag (which has no other purpose in this document, except to start a headline out folded) purely in CSS, without having to modify the DOM at all.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-css" id="fold-headline-styles"><span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Basic headline styles </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">h2, h3 </span>{
+  <span style="color: #eedd82;">cursor</span>: pointer;
+}
+
+<span style="color: #00bfff;">h2.folded, h3.folded </span>{
+  <span style="color: #eedd82;">color</span>: #444;
+}
+
+<span style="color: #00bfff;">h2.unfolded, h3.unfolded </span>{
+}
+
+<span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Hide/show siblings of headlines depending</span>
+<span style="color: #00cd00; font-style: italic;"> * on folded/unfolded state</span>
+<span style="color: #00cd00; font-style: italic;"> </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">h2.folded ~ *, h3.folded ~ * </span>{
+  <span style="color: #eedd82;">display</span>: none;
+}
+
+<span style="color: #00bfff;">h2.unfolded ~ *, h3.unfolded ~ * </span>{
+  <span style="color: #eedd82;">display</span>: block;
+}
+
+<span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Folded/unfolded indicators </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #eedd82;">h2</span>::before, h3::before {
+  <span style="color: #eedd82;">padding-right</span>: 1ex;
+  <span style="color: #eedd82;">color</span>: #aad;
+}
+
+h2.folded::before, h3.folded::before {
+  <span style="color: #eedd82;">content</span>: <span style="color: #dda0dd;">'&#9654;'</span>
+}
+
+h2.unfolded::before, h3.unfolded::before {
+  <span style="color: #eedd82;">content</span>: <span style="color: #dda0dd;">'&#9660;'</span>
+}
+
+<span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Hide the "folded" tag &amp; clean up around it </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">span.tag span.folded </span>{
+  <span style="color: #eedd82;">display</span>: none;
+}
+
+<span style="color: #00bfff;">span.tag </span>{
+  <span style="color: #eedd82;">background</span>: inherit;
+  <span style="color: #eedd82;">padding</span>: none;
+}
+
+<span style="color: #00bfff;">span.tag * </span>{
+  <span style="color: #eedd82;">background</span>: #DDF;
+  <span style="color: #eedd82;">padding</span>: 2px;
+}
+
+<span style="color: #00bfff;">div#text-table-of-contents li span.tag span.folded </span>{
+  <span style="color: #eedd82;">display</span>: none;
+}
+
+<span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Avoid display of spaces that export doesn't</span>
+<span style="color: #00cd00; font-style: italic;"> * clean up in TOC links</span>
+<span style="color: #00cd00; font-style: italic;"> </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">div#text-table-of-contents li a </span>{
+  <span style="color: #eedd82;">text-decoration</span>: none;
+}
+</pre>
+</div>
+<style type="text/css">
+/* Basic headline styles */
+
+  h2, h3 {
+    cursor: pointer;
+  }
+
+  h2.folded, h3.folded {
+    color: #444;
+  }
+
+  h2.unfolded, h3.unfolded {
+  }
+
+  /* Hide/show siblings of headlines depending
+   ,,* on folded/unfolded state
+   ,,*/
+
+  h2.folded ~ *, h3.folded ~ * {
+    display: none;
+  }
+
+  h2.unfolded ~ *, h3.unfolded ~ * {
+    display: block;
+  }
+
+  /* Folded/unfolded indicators */
+
+  h2::before, h3::before {
+    padding-right: 1ex;
+    color: #aad;
+  }
+
+  h2.folded::before, h3.folded::before {
+    content: '▶'
+  }
+
+  h2.unfolded::before, h3.unfolded::before {
+    content: '▼'
+  }
+
+  /* Hide the "folded" tag & clean up around it */
+
+  span.tag span.folded {
+    display: none;
+  }
+
+  span.tag {
+    background: inherit;
+    padding: none;
+  }
+
+  span.tag * {
+    background: #DDF;
+    padding: 2px;
+  }
+
+  div#text-table-of-contents li span.tag span.folded {
+    display: none;
+  }
+
+  /* Avoid display of spaces that export doesn't
+   ,,* clean up in TOC links
+   ,,*/
+
+  div#text-table-of-contents li a {
+    text-decoration: none;
+  }
+</style>
+
+<p>
+And here's the Javascript to make it work. Thanks to CSS3's capabilities, modifying a headline's style is all we actually have to do to change the fold state of its content, thus:<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-js" id="fold-headline-script">window.addEventListener(<span style="color: #dda0dd;">'DOMContentLoaded'</span>, <span style="color: #4f94cd; font-style: italic;">function</span>() {
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">headlines</span> = document.querySelectorAll(<span style="color: #dda0dd;">'h2,h3'</span>);
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">headline</span>;
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">startsFolded</span>;
+
+  <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">toggleHeadlineFold</span> = <span style="color: #4f94cd; font-style: italic;">function</span>() {
+    <span style="color: #7fffd4;">this</span>.classList.toggle(<span style="color: #dda0dd;">'unfolded'</span>);
+    <span style="color: #7fffd4;">this</span>.classList.toggle(<span style="color: #dda0dd;">'folded'</span>);
+  };
+
+  <span style="color: #4f94cd; font-style: italic;">for</span> (<span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">i</span> = 0; i &lt; headlines.length; i++) {
+    headline = headlines.item(i);
+
+    startsFolded = headline
+      .querySelector(<span style="color: #dda0dd;">'span.tag &gt; span.folded'</span>);
+
+    <span style="color: #4f94cd; font-style: italic;">if</span> (startsFolded) {
+      headline.classList.add(<span style="color: #dda0dd;">'folded'</span>);
+    } <span style="color: #4f94cd; font-style: italic;">else</span> {
+      headline.classList.add(<span style="color: #dda0dd;">'unfolded'</span>);
+    }
+
+    headline.addEventListener(<span style="color: #dda0dd;">'click'</span>,
+                              toggleHeadlineFold.bind(headline));
+  };
+});
+</pre>
+</div>
+<script type="text/javascript">
+window.addEventListener('DOMContentLoaded', function() {
+    var headlines = document.querySelectorAll('h2,h3');
+    var headline;
+    var startsFolded;
+
+    var toggleHeadlineFold = function() {
+      this.classList.toggle('unfolded');
+      this.classList.toggle('folded');
+    };
+
+    for (var i = 0; i < headlines.length; i++) {
+      headline = headlines.item(i);
+
+      startsFolded = headline
+        .querySelector('span.tag > span.folded');
+      
+      if (startsFolded) {
+        headline.classList.add('folded');
+      } else {
+        headline.classList.add('unfolded');
+      }
+      
+      headline.addEventListener('click',
+                                toggleHeadlineFold.bind(headline));
+    };
+  });
+</script>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Application structure overview</h2>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Data sources</h2>
+<div class="outline-text-2" id="text-7">
+</div><div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> Station data fixture</h3>
+</div>
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> Track data fixture</h3>
+</div>
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3"><span class="section-number-3">7.3</span> Train position/status API</h3>
+</div>
+<div id="outline-container-sec-7-4" class="outline-3">
+<h3 id="sec-7-4"><span class="section-number-3">7.4</span> Station's next four trains API</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Data transformations</h2>
+<div class="outline-text-2" id="text-8">
+</div><div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> Station data polyline initializers</h3>
+</div>
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> Track data polyline initializers</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Google map initialization</h2>
+<div class="outline-text-2" id="text-9">
+</div><div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> Instantiate the map</h3>
+</div>
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Add track polylines</h3>
+</div>
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3"><span class="section-number-3">9.3</span> Add station polylines</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Train status updates</h2>
+<div class="outline-text-2" id="text-10">
+</div><div id="outline-container-sec-10-1" class="outline-3">
+<h3 id="sec-10-1"><span class="section-number-3">10.1</span> Define train info update function</h3>
+<div class="outline-text-3" id="text-10-1">
+<ul class="org-ul">
+<li>Get train API<br  />
+</li>
+<li>Render trains as map markers<br  />
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-10-2" class="outline-3">
+<h3 id="sec-10-2"><span class="section-number-3">10.2</span> Invoke it on an interval</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> User position handling</h2>
+<div class="outline-text-2" id="text-11">
+</div><div id="outline-container-sec-11-1" class="outline-3">
+<h3 id="sec-11-1"><span class="section-number-3">11.1</span> Define user position update function</h3>
+<div class="outline-text-3" id="text-11-1">
+<ul class="org-ul">
+<li>Get user position<br  />
+</li>
+<li>Render it as a map marker<br  />
+</li>
+<li>Find closest station<br  />
+</li>
+<li>Center the map at midpoint between user &amp; closest station<br  />
+</li>
+<li>Zoom the map to show user &amp; closest station<br  />
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-11-2" class="outline-3">
+<h3 id="sec-11-2"><span class="section-number-3">11.2</span> Invoke it on an interval</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> UI miscellany</h2>
+<div class="outline-text-2" id="text-12">
+</div><div id="outline-container-sec-12-1" class="outline-3">
+<h3 id="sec-12-1"><span class="section-number-3">12.1</span> Views</h3>
+<div class="outline-text-3" id="text-12-1">
+<ul class="org-ul">
+<li>App view: map takes up whole viewport<br  />
+</li>
+<li>Org view: map fits into document flow so that app document is visible<br  />
+</li>
+</ul>
+<div class="org-src-container">
+
+<pre class="src src-css" id="map-views"><span style="color: #00bfff;">.map-container.app-view </span>{
+  <span style="color: #eedd82;">z-index</span>: 1000;
+  <span style="color: #eedd82;">position</span>: fixed;
+  <span style="color: #eedd82;">left</span>: 0px;
+  <span style="color: #eedd82;">right</span>: 0px;
+  <span style="color: #eedd82;">top</span>: 0px;
+  <span style="color: #eedd82;">bottom</span>: 0px;
+}
+
+<span style="color: #00bfff;">.map-container.org-view </span>{
+  <span style="color: #eedd82;">position</span>: static;
+  <span style="color: #eedd82;">width</span>: 100%;
+  <span style="color: #eedd82;">height</span>: 600px;
+}
+</pre>
+</div>
+<style type="text/css">
+.map-container.app-view {
+    z-index: 1000;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+  }
+
+  .map-container.org-view {
+    position: static;
+    width: 100%;
+    height: 600px;
+  }
+</style>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2" class="outline-3">
+<h3 id="sec-12-2"><span class="section-number-3">12.2</span> View toggle</h3>
+<div class="outline-text-3" id="text-12-2">
+<ul class="org-ul">
+<li>A fixed-position overlay button to switch between app &amp; org view<br  />
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> App activation</h2>
+<div class="outline-text-2" id="text-13">
+<ul class="org-ul">
+<li>Switch to app view<br  />
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> Org source&#xa0;&#xa0;&#xa0;<span class="tag"><span class="folded">folded</span></span></h2>
+<div class="outline-text-2" id="text-14">
+<p>
+This is the complete source of the Org-mode document from which this file was generated.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org" id="light-rail-tracker.org"><span style="color: #b3b3b3;">#+TITLE:</span> <span style="color: #afeeee; font-weight: bold;">Baltimore Light Rail tracker</span>
+<span style="color: #b3b3b3;">#+AUTHOR:</span> <span style="color: #afeeee;">Aaron Miller <a href="mailto:me%40aaron-miller.me">&lt;me@aaron-miller.me&gt;</a></span>
+<span style="color: #00cd00; font-style: italic;">#+LANGUAGE: en</span>
+<span style="color: #00cd00; font-style: italic;">#+OPTIONS: \n:t</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Introduction</span>
+
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** What is this?</span>
+It's a single-page web application which integrates a variety of APIs to produce a map showing:
+- The Baltimore light rail lines and stations
+- If you allow geolocation access, the closest station to your current location
+- Real-time positions of trains currently in service
+- ETA information for trains arriving at the station nearest you
+
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** OK, but what /is/ this?</span>
+It's an Emacs Org-mode file that embodies the aforementioned single-page web application, written in the literate programming style. Exporting this file to HTML, using Org-mode's core export functionality, produces a build of the web application which you can host on your favorite server and use in your favorite browser.
+
+The best way to read this document is in Emacs with Org 8.x and the Org and Emacs Lisp reference manuals installed. That way, you get the full benefit of this powerful programming environment, in which, for example, the full source and documentation of any Emacs Lisp function is just a few keystrokes away. (If you're wondering: =C-h f RET= while point is on the function name, then =TAB RET= in the ~*Help*~ buffer.)
+
+Failing that, you'll probably get the most benefit out of this document if you come to it with a basic understanding of both Org mode and Emacs Lisp; the former, of course, since the document is written in it, and the latter so that you can understand what's going on in the Emacs Lisp utility functions used throughout this document.
+
+That said, if you're totally unfamiliar with everything I've just mentioned, there's probably still something for you here. If nothing else, maybe an example of literate programming might come in handy. In any case, enjoy! And if you have questions, don't hesitate to <span style="color: #00ffff; text-decoration: underline;"><a href="mailto:me@aaron-miller.me">ask</a></span>.
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* External libraries</span>
+Our app depends on a few externally hosted Javascript libraries, so let's go ahead and include them in the HTML document.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: external-library-refs</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC html :eval never</span>
+  &lt;<span style="color: #00bfff;">script</span> <span style="color: #eedd82;">type</span>=<span style="color: #dda0dd;">"text/javascript"</span>
+          <span style="color: #eedd82;">src</span>=<span style="color: #dda0dd;">"<a href="http://danml.com/js/download.js">http://danml.com/js/download.js</a>"</span>&gt;&lt;/<span style="color: #00bfff;">script</span>&gt;
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="div",block-name="external-library-refs") :results html</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Utility functions</span>
+
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** expose-to-js</span>
+We'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: expose-to-js</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC emacs-lisp :exports code :results silent :var block-name="" :var binding=""</span>
+    (and (not (string= block-name <span style="color: #dda0dd;">""</span>))
+         (not (string= binding <span style="color: #dda0dd;">""</span>))
+         (<span style="color: #4f94cd; font-style: italic;">save-excursion</span>
+           (<span style="color: #4f94cd; font-style: italic;">let</span> ((json-encoding-pretty-print t)
+                 (block-lang <span style="color: #dda0dd;">""</span>)
+                 block-loc block-type from to
+                 block-contents cg-handle html-result)
+             <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Expand #+INCLUDE: keywords so that they become named</span>
+             <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">blocks we can find. Since this expansion mutates the</span>
+             <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">buffer contents, we do it within a change group so that it</span>
+             <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">can be atomically reverted once we're done.</span>
+             (setq cg-handle (prepare-change-group))
+             (activate-change-group cg-handle)
+             (org-export-expand-include-keyword)
+             (<span style="color: #4f94cd; font-style: italic;">unwind-protect</span>
+                  (setq block-loc (org-babel-find-named-block block-name))
+               (<span style="color: #4f94cd; font-style: italic;">if</span> (null block-loc)
+                   (<span style="color: #ffc0cb; font-weight: bold;">signal</span> 'no-such-block
+                           (list (concat <span style="color: #dda0dd;">"Block '"</span> block-name
+                                         <span style="color: #dda0dd;">"' not found in this buffer."</span>)))
+                   (<span style="color: #4f94cd; font-style: italic;">progn</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Go to start of block (beginning of #+NAME: line)</span>
+                     (goto-char block-loc)
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Find out what kind of block we're dealing with here,</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">so we can correctly find its end keyword</span>
+                     (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                       (re-search-forward <span style="color: #dda0dd;">"^#\\+BEGIN_</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">[A-Za-z]+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span>)
+                       (setq block-type
+                             (downcase (buffer-substring-no-properties
+                                        (match-beginning 1) (match-end 1)))))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Also capture the block language, if any, so that</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">we know what (if any) kind of unescaping we need</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">to do</span>
+                     (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                       (and (re-search-forward <span style="color: #dda0dd;">" *</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">[_[:alnum:]]+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span> nil t)
+                            (setq block-lang
+                                  (buffer-substring-no-properties
+                                   (match-beginning 1) (match-end 1)))))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Move ahead to the beginning of the first line in the</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">actual source, and store that as the character</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">position where we'll start capturing</span>
+                     (end-of-line)
+                     (forward-char 1)
+                     (setq from (point))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Move ahead to the end of the code block, and store</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">that as the character position where we'll stop</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">capturing</span>
+                     (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                       (re-search-forward (concat <span style="color: #dda0dd;">"^#\\+END_"</span> block-type <span style="color: #dda0dd;">"$"</span>)))
+                     (beginning-of-line)
+                     (setq to (point))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Unescape Org keywords within the source block, if</span>
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">this is an Org source block</span>
+                     (and (string= <span style="color: #dda0dd;">"org"</span> block-lang)
+                          (<span style="color: #4f94cd; font-style: italic;">progn</span>
+                            (goto-char from)
+                            (<span style="color: #4f94cd; font-style: italic;">save-match-data</span>
+                              (<span style="color: #4f94cd; font-style: italic;">while</span> (and (not (&gt; (point) to))
+                                          (re-search-forward <span style="color: #dda0dd;">"^</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;"> *</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">,</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">(</span><span style="color: #dda0dd;">#\\+</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">|</span><span style="color: #dda0dd;">\\*</span><span style="color: #dda0dd; font-weight: bold;">\\</span><span style="color: #dda0dd; font-weight: bold;">)</span><span style="color: #dda0dd;">"</span>
+                                                             to t))
+                                (replace-match <span style="color: #dda0dd;">"\\1\\2"</span>)
+                                (setq to (- to 1))))))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Capture the source block contents...</span>
+                     (setq block-contents
+                           (buffer-substring-no-properties from to))
+                     <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">...and put together a string with the &lt;script&gt; tag</span>
+                     (setq html-result
+                           (concat <span style="color: #dda0dd;">"&lt;script type=\"text/javascript\"&gt;"</span> <span style="color: #dda0dd;">"\n"</span>
+                                   <span style="color: #dda0dd;">"window."</span> binding
+                                   <span style="color: #dda0dd;">" = "</span>
+                                   (json-encode block-contents) <span style="color: #dda0dd;">";"</span>
+                                   <span style="color: #dda0dd;">"\n"</span>
+                                   <span style="color: #dda0dd;">"&lt;/script&gt;"</span>))
+                     (cancel-change-group cg-handle)))
+               <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Make sure we don't leave the buffer mutated if we signal</span>
+               <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">(this is the `</span><span style="color: #7fffd4; font-style: italic;">unwind-protect</span><span style="color: #00cd00; font-style: italic;">''s unwind form)</span>
+               (cancel-change-group cg-handle))
+             <span style="color: #00cd00; font-style: italic;">;; </span><span style="color: #00cd00; font-style: italic;">Finally, return the HTML string</span>
+             html-result)))
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** insert-wrapped-source</span>
+Org-mode doesn't currently support syntax highlighting in example blocks, and also doesn't support named references to the literal content of a source block (rather than the results of evaluating that source block).
+
+This is a pain in the neck for us, because we want to do both of these things. Defining our app's Javascript and CSS code in source code blocks is the only way to get it syntax-highlighted in the exported HTML, and of course we need to be able to insert the raw contents of these source blocks into the exported HTML, so that the browser will make use of them.
+
+Fortunately, Org is smarter than it knows, and provides a couple of lower-level functions, =org-babel-find-named-block= and =org-babel-read-result=, which make it almost trivial to fetch the contents of a source block. We just need to write a little glue code that'll leverage them to fetch the source we need, and a little more that'll wrap that source in a suitable HTML tag. Here's how we do that:
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: insert-wrapped-source</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC emacs-lisp :exports code :results silent :var tag="" :var attrs=() :var block-name=""</span>
+  (and (not (string= tag <span style="color: #dda0dd;">""</span>))
+       (not (string= block-name <span style="color: #dda0dd;">""</span>))
+       (<span style="color: #4f94cd; font-style: italic;">cl-flet</span> ((stringify (alist)
+                            (mapconcat #'identity
+                                       (mapcar #'(<span style="color: #4f94cd; font-style: italic;">lambda</span> (pair)
+                                                   (concat (symbol-name (car pair))
+                                                           <span style="color: #dda0dd;">"="</span> <span style="color: #dda0dd;">"\""</span> (cdr pair) <span style="color: #dda0dd;">"\""</span>))
+                                               alist) <span style="color: #dda0dd;">" "</span>)))
+         (<span style="color: #4f94cd; font-style: italic;">let</span> ((block-loc (org-babel-find-named-block block-name))
+               source)
+           (<span style="color: #4f94cd; font-style: italic;">if</span> (null block-loc)
+               (<span style="color: #ffc0cb; font-weight: bold;">signal</span> 'no-such-block 
+                       (list (concat <span style="color: #dda0dd;">"Block '"</span> block-name <span style="color: #dda0dd;">"' not found in this buffer."</span>)))
+               (<span style="color: #4f94cd; font-style: italic;">save-excursion</span>
+                 (goto-char block-loc)
+                 (setq source (org-babel-read-result))
+                 (concat <span style="color: #dda0dd;">"&lt;"</span> tag <span style="color: #dda0dd;">" "</span> (stringify attrs) <span style="color: #dda0dd;">"&gt;"</span> <span style="color: #dda0dd;">"\n"</span>
+                         source <span style="color: #dda0dd;">"\n"</span>
+                         <span style="color: #dda0dd;">"&lt;/"</span> tag <span style="color: #dda0dd;">"&gt;"</span>))))))
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+
+Now that it's defined, we can insert calls to it in our Org file like so:
+
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_EXAMPLE</span>
+<span style="color: #b3b3b3;">#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="a-javascript-source-block") :results html</span>
+<span style="color: #00cd00; font-style: italic;">#+END_EXAMPLE</span>
+
+and have Org emit the contents of the named block =a-javascript-source-block=, wrapped in ~&lt;script type="text/javascript"&gt;~ and ~&lt;/script&gt;~.
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Org source download</span>
+Now that we have our libraries, we can set up an HTML5 download link that'll let you save a copy of this document's Org source without referencing an external file. That's nice because it preserves our ability to distribute this entire application by passing a single file around, and since the HTML export includes a literal copy of the Org source, this lets us easily extract the source back out of the build.
+
+Note that the ~window.OrgDocumentSource~ binding is created by an inline call to the ~expose-to-js~ utility function we defined earlier. If you're reading the HTML version, you won't see the inline call syntax, but you can use a DOM inspector to examine the resulting ~&lt;script /&gt;~ element, which immediately follows this text.
+
+<span style="color: #00cd00; font-style: italic;">#+CALL: expose-to-js(block-name="light-rail-tracker.org",binding="OrgDocumentSource") :results html :exports both</span>
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: insert-download-link</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC js :eval never</span>
+  (<span style="color: #4f94cd; font-style: italic;">function</span>() {
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">clickHandler</span> = <span style="color: #4f94cd; font-style: italic;">function</span>(<span style="color: #eedd82;">e</span>) {
+      e.preventDefault();
+      download(window.OrgDocumentSource, <span style="color: #dda0dd;">'light-rail-tracker.org'</span>, <span style="color: #dda0dd;">'text/plain'</span>);
+      <span style="color: #4f94cd; font-style: italic;">return</span> <span style="color: #7fffd4;">false</span>;
+    };
+
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">container</span> = document.createElement(<span style="color: #dda0dd;">'div'</span>);
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">link</span> = document.createElement(<span style="color: #dda0dd;">'a'</span>);
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">title</span> = <span style="color: #dda0dd;">'Download light-rail-tracker.org'</span>;
+
+    container.id = <span style="color: #dda0dd;">"source-download-link-container"</span>;
+
+    link.id = <span style="color: #dda0dd;">"source-download-link"</span>;
+    link.href = <span style="color: #dda0dd;">""</span>;
+    link.title = title;
+    link.textContent = title;
+
+    link.addEventListener(<span style="color: #dda0dd;">'click'</span>, clickHandler);
+
+    document.write(container.outerHTML);
+    document.querySelector(<span style="color: #dda0dd;">'div#source-download-link-container'</span>)
+      .appendChild(link);
+  })();
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+
+It'd be nice to style the download link to look pretty, too, wouldn't it? Let's do that.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: download-link-styles</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC css :eval never</span>
+<span style="color: #00bfff;">  div#source-download-link-container </span>{
+    <span style="color: #eedd82;">text-align</span>: center;
+  }
+
+<span style="color: #00bfff;">  a#source-download-link </span>{
+    <span style="color: #eedd82;">display</span>: inline-block;
+    <span style="color: #eedd82;">padding</span>: 12px;
+    <span style="color: #eedd82;">background</span>: #F0F8FF;
+    <span style="color: #eedd82;">border</span>: 3px solid #C0C0F0;
+    <span style="color: #eedd82;">border-radius</span>: 10px;
+    <span style="color: #eedd82;">text-decoration</span>: none;
+    <span style="color: #eedd82;">color</span>: black;
+    <span style="color: #eedd82;">font-family</span>: sans-serif;
+    <span style="color: #eedd82;">font-size</span>: x-large;
+  }
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="download-link-styles") :results html</span>
+
+And here we are!
+
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="insert-download-link") :results html</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* UI conveniences</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Org pre styles</span>
+The default Org-mode template is a little bit incomplete when it comes to the ~&lt;pre&gt;~ tags enclosing source and example blocks. Let's fix that up a little.
+
+While we're at it, let's apply line wrapping to the document source where we include it in itself, so that its many long lines don't require a lot of horizontal scrolling. We'll also get rid of the rather ill-thought-out corner tag that would ordinarily appear when mousing over source blocks with known languages.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: pre-styles</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC css :eval never</span>
+<span style="color: #00bfff;">  pre.src, pre.example </span>{
+    <span style="color: #eedd82;">background</span>: #002;
+    <span style="color: #eedd82;">color</span>: #f0f8ff;
+    <span style="color: #eedd82;">overflow-x</span>: auto;
+    <span style="color: #eedd82;">padding</span>: 5px;
+    <span style="color: #eedd82;">border</span>: black solid 3px;
+    <span style="color: #eedd82;">border-radius</span>: 5px;
+  }
+
+<span style="color: #00bfff;">  pre#light-rail-tracker\.org </span>{
+    <span style="color: #eedd82;">white-space</span>: pre-wrap;
+  }
+
+  <span style="color: #eedd82;">pre</span>::before {
+    <span style="color: #eedd82;">display</span>: none <span style="color: #b0c4de;">!important</span>;
+  }
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="pre-styles") :results html</span>
+
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Headline fold/unfold</span>
+This document includes a fairly sizable number of top-level headlines. To simplify navigation, let's make them fold and unfold when clicked or tapped. We'll leave headlines unfolded by default, with an option to override it by giving a headline a ~:folded:~ tag.
+
+Here are the styles that go with that. 
+
+Do note that we're taking the opportunity to clean up a couple of warts with the way Org's default HTML export template handles heading tags, too; that's what the ~span.tag~ stuff is about, mostly. With it in place, we can hide the ~folded~ tag (which has no other purpose in this document, except to start a headline out folded) purely in CSS, without having to modify the DOM at all.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: fold-headline-styles</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC css :eval never</span>
+<span style="color: #00bfff;">  </span><span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Basic headline styles </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">  h2, h3 </span>{
+    <span style="color: #eedd82;">cursor</span>: pointer;
+  }
+
+<span style="color: #00bfff;">  h2.folded, h3.folded </span>{
+    <span style="color: #eedd82;">color</span>: #444;
+  }
+
+<span style="color: #00bfff;">  h2.unfolded, h3.unfolded </span>{
+  }
+
+<span style="color: #00bfff;">  </span><span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Hide/show siblings of headlines depending</span>
+<span style="color: #00cd00; font-style: italic;">   ,* on folded/unfolded state</span>
+<span style="color: #00cd00; font-style: italic;">   ,</span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">  h2.folded ~ *, h3.folded ~ * </span>{
+    <span style="color: #eedd82;">display</span>: none;
+  }
+
+<span style="color: #00bfff;">  h2.unfolded ~ *, h3.unfolded ~ * </span>{
+    <span style="color: #eedd82;">display</span>: block;
+  }
+
+  <span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Folded/unfolded indicators </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+  <span style="color: #eedd82;">h2</span>::before, h3::before {
+    <span style="color: #eedd82;">padding-right</span>: 1ex;
+    <span style="color: #eedd82;">color</span>: #aad;
+  }
+
+  h2.folded::before, h3.folded::before {
+    <span style="color: #eedd82;">content</span>: <span style="color: #dda0dd;">'&#9654;'</span>
+  }
+
+  h2.unfolded::before, h3.unfolded::before {
+    <span style="color: #eedd82;">content</span>: <span style="color: #dda0dd;">'&#9660;'</span>
+  }
+
+<span style="color: #00bfff;">  </span><span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Hide the "folded" tag &amp; clean up around it </span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">  span.tag span.folded </span>{
+    <span style="color: #eedd82;">display</span>: none;
+  }
+
+<span style="color: #00bfff;">  span.tag </span>{
+    <span style="color: #eedd82;">background</span>: inherit;
+    <span style="color: #eedd82;">padding</span>: none;
+  }
+
+<span style="color: #00bfff;">  span.tag * </span>{
+    <span style="color: #eedd82;">background</span>: #DDF;
+    <span style="color: #eedd82;">padding</span>: 2px;
+  }
+
+<span style="color: #00bfff;">  div#text-table-of-contents li span.tag span.folded </span>{
+    <span style="color: #eedd82;">display</span>: none;
+  }
+
+<span style="color: #00bfff;">  </span><span style="color: #00cd00; font-style: italic;">/* </span><span style="color: #00cd00; font-style: italic;">Avoid display of spaces that export doesn't</span>
+<span style="color: #00cd00; font-style: italic;">   ,* clean up in TOC links</span>
+<span style="color: #00cd00; font-style: italic;">   ,</span><span style="color: #00cd00; font-style: italic;">*/</span>
+
+<span style="color: #00bfff;">  div#text-table-of-contents li a </span>{
+    <span style="color: #eedd82;">text-decoration</span>: none;
+  }
+
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="fold-headline-styles") :results html</span>
+
+And here's the Javascript to make it work. Thanks to CSS3's capabilities, modifying a headline's style is all we actually have to do to change the fold state of its content, thus:
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: fold-headline-script</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC js :eval never</span>
+  window.addEventListener(<span style="color: #dda0dd;">'DOMContentLoaded'</span>, <span style="color: #4f94cd; font-style: italic;">function</span>() {
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">headlines</span> = document.querySelectorAll(<span style="color: #dda0dd;">'h2,h3'</span>);
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">headline</span>;
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">startsFolded</span>;
+
+    <span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">toggleHeadlineFold</span> = <span style="color: #4f94cd; font-style: italic;">function</span>() {
+      <span style="color: #7fffd4;">this</span>.classList.toggle(<span style="color: #dda0dd;">'unfolded'</span>);
+      <span style="color: #7fffd4;">this</span>.classList.toggle(<span style="color: #dda0dd;">'folded'</span>);
+    };
+
+    <span style="color: #4f94cd; font-style: italic;">for</span> (<span style="color: #4f94cd; font-style: italic;">var</span> <span style="color: #eedd82;">i</span> = 0; i &lt; headlines.length; i++) {
+      headline = headlines.item(i);
+
+      startsFolded = headline
+        .querySelector(<span style="color: #dda0dd;">'span.tag &gt; span.folded'</span>);
+
+      <span style="color: #4f94cd; font-style: italic;">if</span> (startsFolded) {
+        headline.classList.add(<span style="color: #dda0dd;">'folded'</span>);
+      } <span style="color: #4f94cd; font-style: italic;">else</span> {
+        headline.classList.add(<span style="color: #dda0dd;">'unfolded'</span>);
+      }
+
+      headline.addEventListener(<span style="color: #dda0dd;">'click'</span>,
+                                toggleHeadlineFold.bind(headline));
+    };
+  });
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="script",attrs='((type . "text/javascript")),block-name="fold-headline-script") :results html</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Application structure overview</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Data sources</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Station data fixture</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Track data fixture</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Train position/status API</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Station's next four trains API</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Data transformations</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Station data polyline initializers</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Track data polyline initializers</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Google map initialization</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Instantiate the map</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Add track polylines</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Add station polylines</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Train status updates</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Define train info update function</span>
+- Get train API
+- Render trains as map markers
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Invoke it on an interval</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* User position handling</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Define user position update function</span>
+- Get user position
+- Render it as a map marker
+- Find closest station
+- Center the map at midpoint between user &amp; closest station
+- Zoom the map to show user &amp; closest station
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Invoke it on an interval</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* UI miscellany</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** Views</span>
+- App view: map takes up whole viewport
+- Org view: map fits into document flow so that app document is visible
+<span style="color: #00cd00; font-style: italic;">#+NAME: map-views</span>
+<span style="color: #00cd00; font-style: italic;">#+BEGIN_SRC css :eval never</span>
+<span style="color: #00bfff;">  .map-container.app-view </span>{
+    <span style="color: #eedd82;">z-index</span>: 1000;
+    <span style="color: #eedd82;">position</span>: fixed;
+    <span style="color: #eedd82;">left</span>: 0px;
+    <span style="color: #eedd82;">right</span>: 0px;
+    <span style="color: #eedd82;">top</span>: 0px;
+    <span style="color: #eedd82;">bottom</span>: 0px;
+  }
+
+<span style="color: #00bfff;">  .map-container.org-view </span>{
+    <span style="color: #eedd82;">position</span>: static;
+    <span style="color: #eedd82;">width</span>: 100%;
+    <span style="color: #eedd82;">height</span>: 600px;
+  }
+<span style="color: #00cd00; font-style: italic;">#+END_SRC</span>
+<span style="color: #00cd00; font-style: italic;">#+CALL: insert-wrapped-source(tag="style",attrs='((type . "text/css")),block-name="map-views") :results html</span>
+<span style="color: #c1ffc1; font-size: 103%; font-weight: bold;">** View toggle</span>
+- A fixed-position overlay button to switch between app &amp; org view
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* App activation</span>
+- Switch to app view
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* Org source                                        </span><span style="color: #7fffd4; font-size: 125%; font-weight: bold;">:folded:</span>
+This is the complete source of the Org-mode document from which this file was generated.
+
+<span style="color: #00cd00; font-style: italic;">#+NAME: light-rail-tracker.org</span>
+<span style="color: #00cd00; font-style: italic;">#+INCLUDE: "./light-rail-tracker.org" src org</span>
+
+<span style="color: #c1ffc1; font-size: 125%; font-weight: bold;">* </span><span style="color: #4f94cd; font-style: italic;">COMMENT</span><span style="color: #c1ffc1; font-size: 125%; font-weight: bold;"> File-local variables</span>
+There are a lot of source blocks in this file. Having to answer a prompt before each one is evaluated gets old fast. Thus we set ~org-confirm-babel-evaluate~ to ~nil~, so that those prompts won't occur.
+
+When loading this file in Emacs, it will prompt before setting the value, because *this is an extremely risky file-local variable* -- specifically, if you do this in a file of untrusted code, all of said code will execute during export or when you invoke ~org-babel-execute-buffer~. Therefore, if you have any doubts about whether the code in a file is trustworthy, don't let it set this value.
+
+Of course, my code in this file isn't out to hose you -- but, for your sake, I really hope you won't take my word for that.
+
+<span style="color: #00cd00; font-style: italic;"># Local Variables&#58;</span>
+<span style="color: #00cd00; font-style: italic;"># org-confirm-babel-evaluate: nil</span>
+<span style="color: #00cd00; font-style: italic;"># End:</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Aaron Miller &lt;me@aaron-miller.me&gt;</p>
+<p class="date">Created: 2016-02-14 Sun 16:15</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

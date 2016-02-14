@@ -34,92 +34,6 @@ Our app depends on a few externally hosted Javascript libraries, so let's go ahe
 
 * Utility functions
 
-** expose-to-js
-We'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.
-
-#+NAME: expose-to-js
-#+BEGIN_SRC emacs-lisp :exports code :results silent :var block-name="" :var binding=""
-    (and (not (string= block-name ""))
-         (not (string= binding ""))
-         (save-excursion
-           (let ((json-encoding-pretty-print t)
-                 (block-lang "")
-                 block-loc block-type from to
-                 block-contents cg-handle html-result)
-             ;; Expand #+INCLUDE: keywords so that they become named
-             ;; blocks we can find. Since this expansion mutates the
-             ;; buffer contents, we do it within a change group so that it
-             ;; can be atomically reverted once we're done.
-             (setq cg-handle (prepare-change-group))
-             (activate-change-group cg-handle)
-             (org-export-expand-include-keyword)
-             (unwind-protect
-                  (setq block-loc (org-babel-find-named-block block-name))
-               (if (null block-loc)
-                   (signal 'no-such-block
-                           (list (concat "Block '" block-name
-                                         "' not found in this buffer.")))
-                   (progn
-                     ;; Go to start of block (beginning of #+NAME: line)
-                     (goto-char block-loc)
-                     ;; Find out what kind of block we're dealing with here,
-                     ;; so we can correctly find its end keyword
-                     (save-match-data
-                       (re-search-forward "^#\\+BEGIN_\\([A-Za-z]+\\)")
-                       (setq block-type
-                             (downcase (buffer-substring-no-properties
-                                        (match-beginning 1) (match-end 1)))))
-                     ;; Also capture the block language, if any, so that
-                     ;; we know what (if any) kind of unescaping we need
-                     ;; to do
-                     (save-match-data
-                       (and (re-search-forward " *\\([_[:alnum:]]+\\)" nil t)
-                            (setq block-lang
-                                  (buffer-substring-no-properties
-                                   (match-beginning 1) (match-end 1)))))
-                     ;; Move ahead to the beginning of the first line in the
-                     ;; actual source, and store that as the character
-                     ;; position where we'll start capturing
-                     (end-of-line)
-                     (forward-char 1)
-                     (setq from (point))
-                     ;; Move ahead to the end of the code block, and store
-                     ;; that as the character position where we'll stop
-                     ;; capturing
-                     (save-match-data
-                       (re-search-forward (concat "^#\\+END_" block-type "$")))
-                     (beginning-of-line)
-                     (setq to (point))
-                     ;; Unescape Org keywords within the source block, if
-                     ;; this is an Org source block
-                     (and (string= "org" block-lang)
-                          (progn
-                            (goto-char from)
-                            (save-match-data
-                              (while (and (not (> (point) to))
-                                          (re-search-forward "^\\( *\\),\\(#\\+\\|\\*\\)"
-                                                             to t))
-                                (replace-match "\\1\\2")
-                                (setq to (- to 1))))))
-                     ;; Capture the source block contents...
-                     (setq block-contents
-                           (buffer-substring-no-properties from to))
-                     ;; ...and put together a string with the <script> tag
-                     (setq html-result
-                           (concat "<script type=\"text/javascript\">" "\n"
-                                   "window." binding
-                                   " = "
-                                   (json-encode block-contents) ";"
-                                   "\n"
-                                   "</script>"))
-                     (cancel-change-group cg-handle)))
-               ;; Make sure we don't leave the buffer mutated if we signal
-               ;; (this is the `unwind-protect''s unwind form)
-               (cancel-change-group cg-handle))
-             ;; Finally, return the HTML string
-             html-result)))
-#+END_SRC
-
 ** insert-wrapped-source
 Org-mode doesn't currently support syntax highlighting in example blocks, and also doesn't support named references to the literal content of a source block (rather than the results of evaluating that source block).
 
@@ -157,6 +71,102 @@ Now that it's defined, we can insert calls to it in our Org file like so:
 #+END_EXAMPLE
 
 and have Org emit the contents of the named block =a-javascript-source-block=, wrapped in ~<script type="text/javascript">~ and ~</script>~.
+
+** expose-to-js
+We'll find ourselves, later on, wanting an easy way to expose named Org blocks to the Javascript environment in the browser, so that they're available for our application code to use. Let's go ahead and define an Emacs Lisp utility function to do that.
+
+Unfortunately, this isn't quite as simple as we'd have preferred it to be. ~org-babel-read-result~ has some trouble with escaped Org source; in particular, it breaks as soon as it hits an escaped ~#+END_SRC~ keyword. 
+
+In order to do a reliable capturing job, then, we have to do some lower-level stuff with ~re-search-forward~ to find the extent of the block we're capturing. Since we may find ourselves dealing with escaped Org source, we also have to do some unescaping, which also apparently has to happen by hand -- if there's an Org function to do that, I haven't been able to find it yet.
+
+Then, too, in order to capture the contents of an ~#+INCLUDE:~ reference, we have to expand it into a block containing the content of the referenced file. Between that and all the postprocessing we do to get a clean capture, there's a lot of buffer mutation going on, so we wrap all that in a change group in order to atomically revert it once we're done with the capture.
+
+Taken all in all, this ends us up with a pretty seriously heavyweight "utility function", but that's how these things work out sometimes. Here's the result:
+
+#+NAME: expose-to-js
+#+BEGIN_SRC emacs-lisp :exports code :results silent :var block-name="" :var binding=""
+  (and (not (string= block-name ""))
+       (not (string= binding ""))
+       (save-excursion
+         (let ((json-encoding-pretty-print t)
+               (block-lang "")
+               block-loc block-type from to
+               block-contents cg-handle html-result)
+           ;; Expand #+INCLUDE: keywords so that they become named
+           ;; blocks we can find. Since this expansion mutates the
+           ;; buffer contents, we do it within a change group so that it
+           ;; can be atomically reverted once we're done.
+           (setq cg-handle (prepare-change-group))
+           (activate-change-group cg-handle)
+           (org-export-expand-include-keyword)
+           (unwind-protect
+                (setq block-loc (org-babel-find-named-block block-name))
+             (if (null block-loc)
+                 (signal 'no-such-block
+                         (list (concat "Block '" block-name
+                                       "' not found in this buffer.")))
+                 (progn
+                   ;; Go to start of block (beginning of #+NAME: line)
+                   (goto-char block-loc)
+                   ;; Find out what kind of block we're dealing with here,
+                   ;; so we can correctly find its end keyword
+                   (save-match-data
+                     (re-search-forward "^#\\+BEGIN_\\([A-Za-z]+\\)")
+                     (setq block-type
+                           (downcase (buffer-substring-no-properties
+                                      (match-beginning 1) (match-end 1)))))
+                   ;; Also capture the block language, if any, so that
+                   ;; we know what (if any) kind of unescaping we need
+                   ;; to do
+                   (save-match-data
+                     (and (re-search-forward " *\\([_[:alnum:]]+\\)" nil t)
+                          (setq block-lang
+                                (buffer-substring-no-properties
+                                 (match-beginning 1) (match-end 1)))))
+                   ;; Move ahead to the beginning of the first line in the
+                   ;; actual source, and store that as the character
+                   ;; position where we'll start capturing
+                   (end-of-line)
+                   (forward-char 1)
+                   (setq from (point))
+                   ;; Move ahead to the end of the code block, and store
+                   ;; that as the character position where we'll stop
+                   ;; capturing
+                   (save-match-data
+                     (re-search-forward (concat "^#\\+END_" block-type "$")))
+                   (beginning-of-line)
+                   (setq to (point))
+                   ;; Unescape Org keywords within the source block, if
+                   ;; this is an Org source block
+                   ;; FIXME this doesn't account for erroneously escaped
+                   ;; FIXME block comment lines in e.g. CSS source blocks
+                   (and (string= "org" block-lang)
+                        (progn
+                          (goto-char from)
+                          (save-match-data
+                            (while (and (not (> (point) to))
+                                        (re-search-forward "^\\( *\\),\\(#\\+\\|\\*\\)"
+                                                           to t))
+                              (replace-match "\\1\\2")
+                              (setq to (- to 1))))))
+                   ;; Capture the source block contents...
+                   (setq block-contents
+                         (buffer-substring-no-properties from to))
+                   ;; ...and put together a string with the <script> tag
+                   (setq html-result
+                         (concat "<script type=\"text/javascript\">" "\n"
+                                 "window." binding
+                                 " = "
+                                 (json-encode block-contents) ";"
+                                 "\n"
+                                 "</script>"))
+                   (cancel-change-group cg-handle)))
+             ;; Make sure we don't leave the buffer mutated if we signal
+             ;; (this is the `unwind-protect''s unwind form)
+             (cancel-change-group cg-handle))
+           ;; Finally, return the HTML string
+           html-result)))
+#+END_SRC
 
 * Org source download
 Now that we have our libraries, we can set up an HTML5 download link that'll let you save a copy of this document's Org source without referencing an external file. That's nice because it preserves our ability to distribute this entire application by passing a single file around, and since the HTML export includes a literal copy of the Org source, this lets us easily extract the source back out of the build.
